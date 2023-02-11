@@ -12,6 +12,6 @@
 ##################################################################
 
 /AnaBarMC/generator/Mode 1
-/AnaBarMC/generator/InputFile data/Gen_test1.root
-/AnaBarMC/analysis/setOutputFile data/G4_test1.root
+/AnaBarMC/generator/InputFile macros/test_proccessed.root
+/AnaBarMC/analysis/setOutputFile macros/test_output_from_mine.root
 
