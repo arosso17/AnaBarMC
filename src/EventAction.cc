@@ -77,6 +77,7 @@ void EventAction::EndOfEventAction(const G4Event* evt)
 //}
   if(DHC) {
     det_hits = DHC->entries();
+    //std::cout << "Number of Detector Hits at end of event = " << det_hits << std::endl;
     //std::cout<<"DHC is true"<<std::endl;
     if( det_hits != 0 ) {
       //std::cout<<"DHC has hit"<<std::endl;
@@ -109,14 +110,16 @@ void EventAction::EndOfEventAction(const G4Event* evt)
         //std::cout << "Point 1" << std::endl;
 	PMTHit* hit2 = static_cast<PMTHit*>( PHC->GetHit(j) );
         //std::cout << "Point 2" << std::endl;
-	fAnaManager->SetPMTKE( hit2 );
+	//fAnaManager->SetPMTKE( hit2 );
         //std::cout << "Point 3" << std::endl;
 	fAnaManager->SetPhotonCount( (G4int) hit2->GetPMTNumber(), (G4int) hit2->GetPhotonCount() );
         //std::cout << "Point 4" << std::endl;
 	fAnaManager->SetPMTNumber( (G4int) hit2->GetPMTNumber() );
         //std::cout << "Point 5" << std::endl;
         //std::cout<<"PMT numbers have been set"<<std::endl;
-	//std::cout << "hit " << j << " pmt number " << hit2->GetPMTNumber() << " number of photons = " << hit2->GetPhotonCount() << std::endl;
+	//if (hit2->GetPMTNumber() < 2504) {
+	//	std::cout << "hit " << j << " pmt number " << hit2->GetPMTNumber() << " number of photons = " << hit2->GetPhotonCount() << std::endl;
+	//}
       }
     }
   }

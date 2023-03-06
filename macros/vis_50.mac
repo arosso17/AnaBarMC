@@ -14,7 +14,7 @@
 ##################################################################
 
 /AnaBarMC/generator/Mode 1
-/AnaBarMC/generator/InputFile data/Gen_test_single.root
+/AnaBarMC/generator/InputFile data/Gen_test_50.root
 /AnaBarMC/analysis/setOutputFile data/G4_vis_single.root
 
 ##################################################################
@@ -30,5 +30,5 @@
 
 ##################################################################
 
-/run/beamOn 1
+/run/beamOn 5
 
