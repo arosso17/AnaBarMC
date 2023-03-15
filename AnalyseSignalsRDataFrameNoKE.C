@@ -30,6 +30,7 @@ const int NDET = NUMPADDLE*NUMBARS*NUMMODULES*NUMSIDES*NUMLAYERS;
 
 int NMaxPMT = 14;
 
+
 bool getTrigger(int Detector_Nhits, int* Detector_id) {
 
     bool tophit = false;
@@ -563,8 +564,8 @@ TCanvas* plotC1(){
   c1->cd(4);
   hFingerT->Draw();
 
-  c1->DrawClone();
-  c1->Print("plots/c1.pdf");
+  //c1->DrawClone();
+  //c1->Print("plots/c1.pdf");
 
   return c1;
 
