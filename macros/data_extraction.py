@@ -28,7 +28,7 @@ for event in range(len(sdtrid)):
 	for index in set(sdtrid[event]):
 		# need to translate into the coordinate frame (and units) of the CDet simulation
 		dat_for_tree["X_vtx"].append(-posy[event][index] * 100)
-		dat_for_tree["Y_vtx"].append(-(posz[event][index] - 4.5) * 100)
+		dat_for_tree["Y_vtx"].append(-posz[event][index] * 100)
 		dat_for_tree["Z_vtx"].append(posx[event][index] * 100)
 		dat_for_tree["Px_p"].append(-momy[event][index] * 1000)
 		dat_for_tree["Py_p"].append(-momz[event][index] * 1000)
@@ -40,7 +40,7 @@ for event in range(len(sdtrid)):
 print(dat_for_tree["X_vtx"][13], dat_for_tree["Y_vtx"][13], dat_for_tree["Z_vtx"][13], dat_for_tree["Px_p"][13], dat_for_tree["Py_p"][13], dat_for_tree["Pz_p"][13], dat_for_tree["En_p"][13], dat_for_tree["PDG"][13])'''
 
 
-file = uproot.recreate("proccessed_demonstration.root")
+file = uproot.recreate("old.root")
 file["h1"] = dat_for_tree
 file.close()
 
