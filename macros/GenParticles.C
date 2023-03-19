@@ -82,7 +82,7 @@ void GenParticles( int fPDGCode = 13, int nevents = 100,
 
   // Initialize input
   TString inname;
-  inname.Form("~/CDetOptical/macros/gep_12Gev100.root");
+  inname.Form("~/CDetOptical/macros/gep_12Gev1000.root");
   fInFileName = inname;
   InitInput();
 
@@ -193,14 +193,23 @@ void GenerateOneSBSParticle(int iEvent)
 	//}
 
 	if (cdet_hit>0) {
-		fVx =        -(*ypos)[(*sdtrack_idx)[0]]*100;
-		fVy =        -(*zpos)[(*sdtrack_idx)[0]]*100;
-		fVz =         (*xpos)[(*sdtrack_idx)[0]]*100;
-		fPx =   -(*ymomentum)[(*sdtrack_idx)[0]]*1000;
+		fVx =        -(*xpos)[(*sdtrack_idx)[0]]*100 + 200;//-(*ypos)[(*sdtrack_idx)[0]]*100 + 0;
+		fVy =        -(*zpos)[(*sdtrack_idx)[0]]*100 + 380;
+		fVz =         (*ypos)[(*sdtrack_idx)[0]]*100 - 160;//(*xpos)[(*sdtrack_idx)[0]]*100 - 400;
+		fPx =   -(*xmomentum)[(*sdtrack_idx)[0]]*1000;//-(*ymomentum)[(*sdtrack_idx)[0]]*1000;
 		fPy =   -(*zmomentum)[(*sdtrack_idx)[0]]*1000;
-		fPz =    (*xmomentum)[(*sdtrack_idx)[0]]*1000;
+		fPz =    (*ymomentum)[(*sdtrack_idx)[0]]*1000;//(*xmomentum)[(*sdtrack_idx)[0]]*1000;
 		fE =        (*energy)[(*sdtrack_idx)[0]]*1000;
 		fPDGCodeTree = (*pid)[(*sdtrack_idx)[0]];
+
+		//fVx =        -(*ypos)[(*sdtrack_idx)[0]]*100 + 0;
+		//fVy =        -(*zpos)[(*sdtrack_idx)[0]]*100 + 380;
+		//fVz =         (*xpos)[(*sdtrack_idx)[0]]*100 - 400;
+		//fPx =   -(*ymomentum)[(*sdtrack_idx)[0]]*1000;
+		//fPy =   -(*zmomentum)[(*sdtrack_idx)[0]]*1000;
+		//fPz =    (*xmomentum)[(*sdtrack_idx)[0]]*1000;
+		//fE =        (*energy)[(*sdtrack_idx)[0]]*1000;
+		//fPDGCodeTree = (*pid)[(*sdtrack_idx)[0]];
 
 		//std::cout << "xpos: " << (*xpos)[(*sdtrack_idx)[0]] << std::endl;
 		//std::cout << "ypos: " << (*ypos)[(*sdtrack_idx)[0]] << std::endl;

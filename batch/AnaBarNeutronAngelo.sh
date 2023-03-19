@@ -23,7 +23,8 @@ echo "/run/initialize"                                                   >>  $MC
 echo "/AnaBarMC/generator/Mode 1"                              >>  $MCMACRO
 #echo "/AnaBarMC/generator/InputFile ../macros/new.root" >>  $MCMACRO
 #echo "/AnaBarMC/generator/InputFile ../macros/hard100.root" >>  $MCMACRO
-echo "/AnaBarMC/generator/InputFile  $tempdir/data/AnaBarMC_Gen_$RUN_NUMBER.root" >>  $MCMACRO
+echo "/AnaBarMC/generator/InputFile  ../macros/AnaBarMC_Gen_$RUN_NUMBER.root" >>  $MCMACRO
+#echo "/AnaBarMC/generator/InputFile  $tempdir/data/AnaBarMC_Gen_$RUN_NUMBER.root" >>  $MCMACRO
 echo "/AnaBarMC/analysis/setOutputFile $tempdir/rootfiles/AnaBarMC_$RUN_NUMBER.root" >>  $MCMACRO
 
 cd $tempdir

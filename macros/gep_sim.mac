@@ -1,5 +1,5 @@
 ## Configure G4SBS for gep (Q^2 = 12 GeV^2)
-/g4sbs/filename        gep_12Gev100.root   ## Output rootfile
+/g4sbs/filename        gep_12Gev1000.root   ## Output rootfile
 
 ## Configure Experiment
 /g4sbs/exp             gep
@@ -37,14 +37,11 @@
 /g4sbs/48D48dist       1.6 m
 
 /tracking/storeTrajectory 1
+/g4sbs/keepsdtrackinfo all 1
+#/g4sbs/keepcalparticles all 1
+#/g4sbs/keephistory all 1
 
-/g4sbs/keepsdtrackinfo all 1
-/g4sbs/keepsdtrackinfo all 1
-/g4sbs/keepcalparticles all 1
-/g4sbs/keepcalparticles all 1
-/g4sbs/keephistory all 1
-/g4sbs/keephistory all 1
 
 
 ## Run 100 events
-/g4sbs/run             100
+/g4sbs/run             1000
