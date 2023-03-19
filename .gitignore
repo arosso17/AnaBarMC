@@ -9,6 +9,7 @@ plots/*.pdf
 batch/data/*.root
 batch/*.mac
 batch/rootfiles/*.root
+batch/runlist_test*
 *.*~
 *.pcm
 .ipynb_checkpoints/*
