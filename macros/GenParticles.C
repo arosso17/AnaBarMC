@@ -9,6 +9,7 @@
 #include "TSystem.h"
 #include "TMath.h"
 
+#include <cmath>
 #include <iostream>
 #include <vector>
 
@@ -191,16 +192,27 @@ void GenerateOneSBSParticle(int iEvent)
 	//	std::cout << "Track index: " << i << "     " << (*sdtrack_idx)[i] << std::endl;
 	//	std::cout << "xpos1: " << i << "     " << (*xpos)[(*sdtrack_idx)[i]] << std::endl;
 	//}
+	//double angle = 1.27583568;
+	double angle = 27.0/180.0*3.14159265;;
 
 	if (cdet_hit>0) {
-		fVx =        -(*xpos)[(*sdtrack_idx)[0]]*100 + 200;//-(*ypos)[(*sdtrack_idx)[0]]*100 + 0;
-		fVy =        -(*zpos)[(*sdtrack_idx)[0]]*100 + 380;
-		fVz =         (*ypos)[(*sdtrack_idx)[0]]*100 - 160;//(*xpos)[(*sdtrack_idx)[0]]*100 - 400;
-		fPx =   -(*xmomentum)[(*sdtrack_idx)[0]]*1000;//-(*ymomentum)[(*sdtrack_idx)[0]]*1000;
-		fPy =   -(*zmomentum)[(*sdtrack_idx)[0]]*1000;
-		fPz =    (*ymomentum)[(*sdtrack_idx)[0]]*1000;//(*xmomentum)[(*sdtrack_idx)[0]]*1000;
+		fVx =        -(-(*zpos)[(*sdtrack_idx)[0]] * sin(angle) + (*xpos)[(*sdtrack_idx)[0]] * cos(angle))*100;
+		fVy =        -((*zpos)[(*sdtrack_idx)[0]] *cos(angle) + (*xpos)[(*sdtrack_idx)[0]] * sin(angle) - 4.0735)*100;
+		fVz =         -(*ypos)[(*sdtrack_idx)[0]]*100;
+		fPx =   -(-(*zmomentum)[(*sdtrack_idx)[0]] * sin(angle) + (*xmomentum)[(*sdtrack_idx)[0]] * cos(angle))*1000;
+		fPy =   -((*zmomentum)[(*sdtrack_idx)[0]] * cos(angle) + (*xmomentum)[(*sdtrack_idx)[0]] * sin(angle))*1000;
+		fPz =    -(*ymomentum)[(*sdtrack_idx)[0]]*1000;
 		fE =        (*energy)[(*sdtrack_idx)[0]]*1000;
 		fPDGCodeTree = (*pid)[(*sdtrack_idx)[0]];
+		
+		//fVx =        -(*xpos)[(*sdtrack_idx)[0]]*100 + 200;
+		//fVy =        -(*zpos)[(*sdtrack_idx)[0]]*100 + 380;
+		//fVz =         (*ypos)[(*sdtrack_idx)[0]]*100 - 150;
+		//fPx =   -(*xmomentum)[(*sdtrack_idx)[0]]*1000;
+		//fPy =   -(*zmomentum)[(*sdtrack_idx)[0]]*1000;
+		//fPz =    (*ymomentum)[(*sdtrack_idx)[0]]*1000;
+		//fE =        (*energy)[(*sdtrack_idx)[0]]*1000;
+		//fPDGCodeTree = (*pid)[(*sdtrack_idx)[0]];
 
 		//fVx =        -(*ypos)[(*sdtrack_idx)[0]]*100 + 0;
 		//fVy =        -(*zpos)[(*sdtrack_idx)[0]]*100 + 380;

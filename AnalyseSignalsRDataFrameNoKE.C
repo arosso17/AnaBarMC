@@ -30,6 +30,8 @@ const int NDET = NUMPADDLE*NUMBARS*NUMMODULES*NUMSIDES*NUMLAYERS;
 
 int NMaxPMT = 14;
 
+bool save;
+
 
 bool getTrigger(int Detector_Nhits, int* Detector_id) {
 
@@ -490,10 +492,11 @@ std::vector<float> getAnaBarEdTotal(bool trigger, float fNewTheta, int Detector_
     return v;
 }
 
-RNode AnalyseSignalsRDataFrameNoKE() {
+RNode AnalyseSignalsRDataFrameNoKE(bool s=false) {
 
-	auto fileName = "data/AnaBarMC_7777.root";
+	auto fileName = "data/AnaBarMC_2.root";
 	auto treeName = "T";
+	save = s;
 
 	ROOT::RDataFrame d(treeName,fileName);
 
@@ -738,7 +741,7 @@ TCanvas* plotC6(){
 
 TCanvas* plotC7(){
 
-	RNode fdft = AnalyseSignalsRDataFrameNoKE();
+	RNode fdft = AnalyseSignalsRDataFrameNoKE(save);
 
 	auto hFinger_Edep_vs_Nphot = fdft.Filter("trigger2").Histo2D({"h3", "Finger Edep vs Nphot", 100, 0.01, 500.0, 100, 0.01, 10.0},"fingerPMTNPhotons","fingerEd");
 	auto hAnaBar_Edep_vs_Nphot = fdft.Filter("trigger2").Histo2D({"h4", "AnaBar Edep vs NphotTotal", 100, 0.01, 30.0, 100, 0.01, 500.0},"anaBarEdTotal","anaBarNPhotonsTotal");
@@ -756,9 +759,18 @@ TCanvas* plotC7(){
 	c7->cd(4);
 	TProfile *prof = hAnaBar_Edep_vs_Nphot->ProfileX();
 	prof->Fit("pol1");
+	//fit = prof->Fit("pol1");
+	//double slope = fit->Value(1);
+	//double yInt = fit->Value(0);
+	//std::cout << "Slope: " << slope << std::endl;
+	//std::cout << "Inverse slope: " << 1.0/slope << std::endl;
+	//std::cout << "y-int: " << yInt << std::endl;
 
 	c7->DrawClone();
-	c7->Print("plots/c7RA.pdf");
+	if (save) {
+		c7->Print("plots/c7RA.pdf");
+		cout << "saved canvas to plots/c7RA.pdf" << endl;
+	};
 
 	return c7;
 
@@ -766,7 +778,7 @@ TCanvas* plotC7(){
 
 TCanvas* plotC8(){
 
-	RNode fdft = AnalyseSignalsRDataFrameNoKE();
+	RNode fdft = AnalyseSignalsRDataFrameNoKE(save);
 
 	auto hFinger_Edep_vs_NphotCut = fdft.Filter("trigger3").Histo2D({"h3", "Finger Edep vs Nphot", 100, 0.01, 500.0, 100, 0.01, 10.0},"fingerPMTNPhotons","fingerEd");
 	auto hAnaBar_Edep_vs_NphotCut = fdft.Filter("trigger3").Histo2D({"h4", "AnaBar Edep vs NphotTotal", 100, 0.01, 30.0, 100, 0.01, 500.0},"anaBarEdTotal","anaBarNPhotonsTotal");
@@ -786,7 +798,10 @@ TCanvas* plotC8(){
 	profCut->Fit("pol1");
 
 	c8->DrawClone();
-	c8->Print("plots/c8RA.pdf");
+	if (save) {
+		c8->Print("plots/c8RA.pdf");
+		cout << "saved canvas to plots/c8RA.pdf" << endl;
+	};
 
 	return c8;
 

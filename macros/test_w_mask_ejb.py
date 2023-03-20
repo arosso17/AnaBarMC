@@ -101,15 +101,15 @@ plts = axs.flat
 
 tx = np.array(dat_for_tree["Z_vtx"])
 ty = np.array(dat_for_tree["X_vtx"])
-angle = np.radians(16.9)
+angle = np.radians(27.0)
 
 print("angle:", angle)
 
 #newx = -(tx * np.cos(angle) + ty * np.sin(angle)) * 100
 #newy = -((-tx * np.sin(angle) + ty * np.cos(angle)) - 4.0735) * 100
-newx = -((-tx * np.sin(angle) + ty * np.cos(angle)) * 100
+newx = -(-tx * np.sin(angle) + ty * np.cos(angle)) * 100
 newy = -((tx * np.cos(angle) + ty * np.sin(angle)) - 4.0735) * 100
-newz = -np.array(dat_for_tree["Y_vtx"]) * 100 - 150
+newz = -np.array(dat_for_tree["Y_vtx"]) * 100
 
 print("\n\n##########New POSITIONS##########\n")
 
@@ -138,8 +138,8 @@ plts[2].set_title('newz')
 txp = np.array(dat_for_tree["Pz_p"])
 typ = np.array(dat_for_tree["Px_p"])
 
-newxp = -(txp * np.cos(angle) - typ * np.sin(angle))
-newyp = -(txp * np.sin(angle) + typ * np.cos(angle))
+newxp = -(-txp * np.sin(angle) + typ * np.cos(angle))
+newyp = -(txp * np.cos(angle) + typ * np.sin(angle))
 newzp = -np.array(dat_for_tree["Py_p"])
 
 print("\n\n##########New Momenta##########\n")

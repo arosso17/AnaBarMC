@@ -1,5 +1,5 @@
 ## Configure G4SBS for gep (Q^2 = 12 GeV^2)
-/g4sbs/filename        gep_12Gev1000.root   ## Output rootfile
+/g4sbs/filename        gep_12Gev1mil.root   ## Output rootfile
 
 ## Configure Experiment
 /g4sbs/exp             gep
@@ -44,4 +44,5 @@
 
 
 ## Run 100 events
-/g4sbs/run             1000
+/g4sbs/eventstatusevery 100
+/g4sbs/run             1000000
