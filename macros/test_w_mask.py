@@ -8,6 +8,11 @@ import matplotlib.pyplot as plt
 file = uproot.open("gep_12Gev1000.root")
 tree = file["T"]
 
+
+bb_angle = np.radians(27)
+bb_dist = 4.0735
+
+
 # Get the arrays for the variables of interest
 cdet_hit = tree["Earm.CDET_Scint.hit.nhits"].array()
 track_indexes = tree["Earm.CDET_Scint.hit.sdtridx"].array()
@@ -37,11 +42,6 @@ for event in range(len(cdet_hit)):
         dat_for_tree["En_p"].append(energy[event][track_idx])
         dat_for_tree["Mass"].append(particle.Particle.from_pdgid(pid[event][track_idx]).mass)
         dat_for_tree["PDG"].append(pid[event][track_idx])
-
-# Create a new ROOT file with the extracted information
-#file = uproot.recreate("del.root")
-#file["h1"] = dat_for_tree
-#file.close()
 
 fig = plt.figure()
 gs = fig.add_gridspec(2, 3)
@@ -101,15 +101,10 @@ plts = axs.flat
 
 tx = np.array(dat_for_tree["Z_vtx"])
 ty = np.array(dat_for_tree["X_vtx"])
-angle = np.radians(16.9)
 
-print("angle:", angle)
-
-#newx = -(tx * np.cos(angle) + ty * np.sin(angle)) * 100
-#newy = -((-tx * np.sin(angle) + ty * np.cos(angle)) - 4.0735) * 100
-newx = -((-tx * np.sin(angle) + ty * np.cos(angle)) * 100
-newy = -((tx * np.cos(angle) + ty * np.sin(angle)) - 4.0735) * 100
-newz = -np.array(dat_for_tree["Y_vtx"]) * 100 - 150
+newx = -(-tx * np.sin(bb_angle) + ty * np.cos(bb_angle)) * 100
+newy = -((tx * np.cos(bb_angle) + ty * np.sin(bb_angle)) - bb_dist) * 100
+newz = -np.array(dat_for_tree["Y_vtx"]) * 100
 
 print("\n\n##########New POSITIONS##########\n")
 
@@ -138,8 +133,8 @@ plts[2].set_title('newz')
 txp = np.array(dat_for_tree["Pz_p"])
 typ = np.array(dat_for_tree["Px_p"])
 
-newxp = -(txp * np.cos(angle) - typ * np.sin(angle))
-newyp = -(txp * np.sin(angle) + typ * np.cos(angle))
+newxp = -(-txp * np.sin(bb_angle) + typ * np.cos(bb_angle))
+newyp = -(txp * np.cos(bb_angle) + typ * np.sin(bb_angle))
 newzp = -np.array(dat_for_tree["Py_p"])
 
 print("\n\n##########New Momenta##########\n")

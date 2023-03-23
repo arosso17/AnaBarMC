@@ -66,14 +66,17 @@ const Float_t   fMomMax  = 20.0;
 const Float_t   fMomMean =  3.5;  
 Float_t         fIntRatio;
 
+const float BBAngle = 29.0/180.0*TMath::Pi();
+const float BBDist = 4.0735;
+
 // ------------------------------------------------------------------------------------------------
 
+// mode 0: from g4sbs data
+// mode 1: random specified particle
+
 void GenParticles( int fPDGCode = 13, int nevents = 100, 
-		    int run_number = 2000) 
+		    int run_number = 2000, int mode = 0) 
 {
-  
-  // Initialise random number generator
-  fRand = new TRandom3( run_number );
   
   // Set up PDG Table
   fPDG             = new TDatabasePDG();
@@ -93,6 +96,11 @@ void GenParticles( int fPDGCode = 13, int nevents = 100,
   fOutFileName = fname;
   InitOutput();
 
+  if (mode == 1) {
+
+  // Initialise random number generator
+  fRand = new TRandom3( run_number );
+
   // Initialise sampling functions
   TF1*    momPowFunc  = new TF1("momPowFunc", "x^(-2.7)", fMomMean, fMomMax );
   Float_t meanval     = momPowFunc->Eval( fMomMean );
@@ -108,7 +116,8 @@ void GenParticles( int fPDGCode = 13, int nevents = 100,
   TF1* phiFunc   = new TF1("phiFunc",   "1",               0.,             TMath::TwoPi() );
   fThetaDist     = (TH1*)thetaFunc->GetHistogram()->Clone("ThetaDist");
   fPhiDist       = (TH1*)phiFunc->GetHistogram()->Clone("PhiDist");
-
+  };
+  
   // Initialise counters
   int   nTotal = 0;  
   TBenchmark* bench  = new TBenchmark();
@@ -118,9 +127,8 @@ void GenParticles( int fPDGCode = 13, int nevents = 100,
   for( int i = 0; i < nevents; i++ ) 
     {
       nTotal++;
-      
-      GenerateOneSBSParticle(i);
-      //GenerateOneParticle(fPDGCode);
+      if (mode == 0) GenerateOneSBSParticle(i);
+      else GenerateOneParticle(fPDGCode);
       fROOTTree->Fill();
       
       if( i % 10 == 0 )
@@ -192,36 +200,18 @@ void GenerateOneSBSParticle(int iEvent)
 	//	std::cout << "Track index: " << i << "     " << (*sdtrack_idx)[i] << std::endl;
 	//	std::cout << "xpos1: " << i << "     " << (*xpos)[(*sdtrack_idx)[i]] << std::endl;
 	//}
-	//double angle = 1.27583568;
-	double angle = 27.0/180.0*3.14159265;;
+	
+	
 
 	if (cdet_hit>0) {
-		fVx =        -(-(*zpos)[(*sdtrack_idx)[0]] * sin(angle) + (*xpos)[(*sdtrack_idx)[0]] * cos(angle))*100;
-		fVy =        -((*zpos)[(*sdtrack_idx)[0]] *cos(angle) + (*xpos)[(*sdtrack_idx)[0]] * sin(angle) - 4.0735)*100;
+		fVx =        -(-(*zpos)[(*sdtrack_idx)[0]] * sin(BBAngle) + (*xpos)[(*sdtrack_idx)[0]] * cos(BBAngle))*100;
+		fVy =        -((*zpos)[(*sdtrack_idx)[0]] *cos(BBAngle) + (*xpos)[(*sdtrack_idx)[0]] * sin(BBAngle) - BBDist)*100;
 		fVz =         -(*ypos)[(*sdtrack_idx)[0]]*100;
-		fPx =   -(-(*zmomentum)[(*sdtrack_idx)[0]] * sin(angle) + (*xmomentum)[(*sdtrack_idx)[0]] * cos(angle))*1000;
-		fPy =   -((*zmomentum)[(*sdtrack_idx)[0]] * cos(angle) + (*xmomentum)[(*sdtrack_idx)[0]] * sin(angle))*1000;
+		fPx =   -(-(*zmomentum)[(*sdtrack_idx)[0]] * sin(BBAngle) + (*xmomentum)[(*sdtrack_idx)[0]] * cos(BBAngle))*1000;
+		fPy =   -((*zmomentum)[(*sdtrack_idx)[0]] * cos(BBAngle) + (*xmomentum)[(*sdtrack_idx)[0]] * sin(BBAngle))*1000;
 		fPz =    -(*ymomentum)[(*sdtrack_idx)[0]]*1000;
 		fE =        (*energy)[(*sdtrack_idx)[0]]*1000;
 		fPDGCodeTree = (*pid)[(*sdtrack_idx)[0]];
-		
-		//fVx =        -(*xpos)[(*sdtrack_idx)[0]]*100 + 200;
-		//fVy =        -(*zpos)[(*sdtrack_idx)[0]]*100 + 380;
-		//fVz =         (*ypos)[(*sdtrack_idx)[0]]*100 - 150;
-		//fPx =   -(*xmomentum)[(*sdtrack_idx)[0]]*1000;
-		//fPy =   -(*zmomentum)[(*sdtrack_idx)[0]]*1000;
-		//fPz =    (*ymomentum)[(*sdtrack_idx)[0]]*1000;
-		//fE =        (*energy)[(*sdtrack_idx)[0]]*1000;
-		//fPDGCodeTree = (*pid)[(*sdtrack_idx)[0]];
-
-		//fVx =        -(*ypos)[(*sdtrack_idx)[0]]*100 + 0;
-		//fVy =        -(*zpos)[(*sdtrack_idx)[0]]*100 + 380;
-		//fVz =         (*xpos)[(*sdtrack_idx)[0]]*100 - 400;
-		//fPx =   -(*ymomentum)[(*sdtrack_idx)[0]]*1000;
-		//fPy =   -(*zmomentum)[(*sdtrack_idx)[0]]*1000;
-		//fPz =    (*xmomentum)[(*sdtrack_idx)[0]]*1000;
-		//fE =        (*energy)[(*sdtrack_idx)[0]]*1000;
-		//fPDGCodeTree = (*pid)[(*sdtrack_idx)[0]];
 
 		//std::cout << "xpos: " << (*xpos)[(*sdtrack_idx)[0]] << std::endl;
 		//std::cout << "ypos: " << (*ypos)[(*sdtrack_idx)[0]] << std::endl;

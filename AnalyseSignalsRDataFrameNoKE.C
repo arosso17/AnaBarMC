@@ -30,8 +30,6 @@ const int NDET = NUMPADDLE*NUMBARS*NUMMODULES*NUMSIDES*NUMLAYERS;
 
 int NMaxPMT = 14;
 
-bool save;
-
 
 bool getTrigger(int Detector_Nhits, int* Detector_id) {
 
@@ -55,7 +53,11 @@ bool getTrigger(int Detector_Nhits, int* Detector_id) {
                 ahit = true;
             }
         }
-        if (tophit && bottomhit) {
+        //if (tophit && bottomhit) {
+        //    fhit = true;
+        //    trigger = true;
+        //}
+	if (ahit) {
             fhit = true;
             trigger = true;
         }
@@ -492,11 +494,10 @@ std::vector<float> getAnaBarEdTotal(bool trigger, float fNewTheta, int Detector_
     return v;
 }
 
-RNode AnalyseSignalsRDataFrameNoKE(bool s=false) {
+RNode AnalyseSignalsRDataFrameNoKE() {
 
-	auto fileName = "data/AnaBarMC_2.root";
+	auto fileName = "data/AnaBarMC_6.root";
 	auto treeName = "T";
-	save = s;
 
 	ROOT::RDataFrame d(treeName,fileName);
 
@@ -546,7 +547,29 @@ RNode AnalyseSignalsRDataFrameNoKE(bool s=false) {
 	return fdft;
 }
 
-TCanvas* plotC1(){
+/*
+TCanvas* muon() {
+	RNode fdft = AnalyseSignalsRDataFrameNoKE();
+	
+	auto muon_fdft = fdft.Filter("anaBarPDG==13");
+	auto ed = muon_fdft.Histo1D("anaBarEd");
+	auto edTotal = muon_fdft.Histo1D("anaBarEdTotal");
+	
+	TCanvas *muon = new TCanvas("muon","muon",800,800);
+	muon->Divide(1,2,0.01,0.01,0);
+
+	muon->cd(1);
+	ed->Draw();
+	muon->cd(2);
+	edTotal->Draw();
+
+
+	muon->DrawClone();
+	return muon;
+}
+*/
+
+TCanvas* plotC1(bool s=false){
 
   RNode fdft = AnalyseSignalsRDataFrameNoKE();
 
@@ -567,14 +590,15 @@ TCanvas* plotC1(){
   c1->cd(4);
   hFingerT->Draw();
 
-  //c1->DrawClone();
-  //c1->Print("plots/c1.pdf");
-
+  c1->DrawClone();
+  if (s) {
+  c1->Print("plots/c1.pdf");
+  };
   return c1;
 
 }
 
-TCanvas* plotC2(){
+TCanvas* plotC2(bool s=false){
 
 	RNode fdft = AnalyseSignalsRDataFrameNoKE();
 
@@ -596,14 +620,15 @@ TCanvas* plotC2(){
 	hPrimPdg->Draw();
 
 	c2->DrawClone();
+	if (s) {
 	c2->Print("plots/c2RA.pdf");
-
+	};
 	return c2;
 
 }
 
 
-TCanvas* plotC3(){
+TCanvas* plotC3(bool s=false){
 
 	RNode fdft = AnalyseSignalsRDataFrameNoKE();
 
@@ -637,14 +662,15 @@ TCanvas* plotC3(){
 	hAnaBarPMTID->Draw();
 
 	c3->DrawClone();
+	if (s) {
 	c3->Print("plots/c3RA.pdf");
-
+	};
 	return c3;
 
 }
 
 
-TCanvas* plotC4(){
+TCanvas* plotC4(bool s=false){
 
 	RNode fdft = AnalyseSignalsRDataFrameNoKE();
 
@@ -686,13 +712,14 @@ TCanvas* plotC4(){
 	hAnaBarPMTNphot->Draw();
 
 	c4->DrawClone();
+	if (s) {
 	c4->Print("plots/c4RA.pdf");
-
+	};
 	return c4;
 }
 
 
-TCanvas* plotC5(){
+TCanvas* plotC5(bool s=false){
 
 	RNode fdft = AnalyseSignalsRDataFrameNoKE();
 
@@ -714,13 +741,14 @@ TCanvas* plotC5(){
 	hAnaBarT->Draw();
 
 	c5->DrawClone();
+	if (s) {
 	c5->Print("plots/c5RA.pdf");
-
+	};
 	return c5;
 
 }
 
-TCanvas* plotC6(){
+TCanvas* plotC6(bool s=false){
 
 	RNode fdft = AnalyseSignalsRDataFrameNoKE();
 
@@ -733,15 +761,16 @@ TCanvas* plotC6(){
 	hE1vsE2->Draw("COLZ");
 
 	c6->DrawClone();
+	if (s) {
 	c6->Print("plots/c6RA.pdf");
-
+	};
 	return c6;
 
 }
 
-TCanvas* plotC7(){
+TCanvas* plotC7(bool s=false){
 
-	RNode fdft = AnalyseSignalsRDataFrameNoKE(save);
+	RNode fdft = AnalyseSignalsRDataFrameNoKE();
 
 	auto hFinger_Edep_vs_Nphot = fdft.Filter("trigger2").Histo2D({"h3", "Finger Edep vs Nphot", 100, 0.01, 500.0, 100, 0.01, 10.0},"fingerPMTNPhotons","fingerEd");
 	auto hAnaBar_Edep_vs_Nphot = fdft.Filter("trigger2").Histo2D({"h4", "AnaBar Edep vs NphotTotal", 100, 0.01, 30.0, 100, 0.01, 500.0},"anaBarEdTotal","anaBarNPhotonsTotal");
@@ -767,18 +796,17 @@ TCanvas* plotC7(){
 	//std::cout << "y-int: " << yInt << std::endl;
 
 	c7->DrawClone();
-	if (save) {
+	if (s) {
 		c7->Print("plots/c7RA.pdf");
-		cout << "saved canvas to plots/c7RA.pdf" << endl;
 	};
 
 	return c7;
 
 }
 
-TCanvas* plotC8(){
+TCanvas* plotC8(bool s=false){
 
-	RNode fdft = AnalyseSignalsRDataFrameNoKE(save);
+	RNode fdft = AnalyseSignalsRDataFrameNoKE();
 
 	auto hFinger_Edep_vs_NphotCut = fdft.Filter("trigger3").Histo2D({"h3", "Finger Edep vs Nphot", 100, 0.01, 500.0, 100, 0.01, 10.0},"fingerPMTNPhotons","fingerEd");
 	auto hAnaBar_Edep_vs_NphotCut = fdft.Filter("trigger3").Histo2D({"h4", "AnaBar Edep vs NphotTotal", 100, 0.01, 30.0, 100, 0.01, 500.0},"anaBarEdTotal","anaBarNPhotonsTotal");
@@ -798,16 +826,15 @@ TCanvas* plotC8(){
 	profCut->Fit("pol1");
 
 	c8->DrawClone();
-	if (save) {
+	if (s) {
 		c8->Print("plots/c8RA.pdf");
-		cout << "saved canvas to plots/c8RA.pdf" << endl;
 	};
 
 	return c8;
 
 }
 
-TCanvas* plotC11(){
+TCanvas* plotC11(bool s=false){
 
 	RNode fdft = AnalyseSignalsRDataFrameNoKE();
 
@@ -820,14 +847,15 @@ TCanvas* plotC11(){
 	hAnaBarMult->Draw();
 
 	c11->DrawClone();
+	if (s){
 	c11->Print("plots/c11RA.pdf");
-
+	};
 	return c11;
 
 }
 
 
-TCanvas* plotC12(){
+TCanvas* plotC12(bool s=false){
 
 	RNode fdft = AnalyseSignalsRDataFrameNoKE();
 
@@ -846,8 +874,9 @@ TCanvas* plotC12(){
 	hPrimPz->Draw();
 
 	c12->DrawClone();
+	if (s) {
 	c12->Print("plots/c12.pdf");
-
+	};
 	return c12;
 
 }
