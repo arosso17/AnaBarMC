@@ -13,4 +13,5 @@ batch/runlist_test*
 *.*~
 *.pcm
 .ipynb_checkpoints/*
+macros/.ipynb_checkpoints/*
 __pycache__/
