@@ -74,7 +74,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   case EPGA_ROOT:
     if(fGenTree) {
 
-	std::cout << "In PrimaryGeneratorAction: " << fPDG << std::endl;
+	//std::cout << "In PrimaryGeneratorAction: " << fPDG << std::endl;
       
       fGenTree->GetEvent(fNevent++);
 
@@ -111,10 +111,10 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       fTp          = fParticleGun->GetParticleTime();
       fPDefinition = fParticleGun->GetParticleDefinition();
 	
-	std::cout << "Vertex: " << fVx << " " << fVy << " " << fVz << std::endl;
-	std::cout << "P_comp: " << fPxp << " " << fPyp << " " << fPzp << std::endl;
-	std::cout << "Energy: " << fEp << " " << fTp << " " << fPDefinition << std::endl;
-	std::cout << std::endl;
+	//std::cout << "Vertex: " << fVx << " " << fVy << " " << fVz << std::endl;
+	//std::cout << "P_comp: " << fPxp << " " << fPyp << " " << fPzp << std::endl;
+	//std::cout << "Energy: " << fEp << " " << fTp << " " << fPDefinition << std::endl;
+	//std::cout << std::endl;
     }
     break;
   default:

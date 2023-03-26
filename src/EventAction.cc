@@ -29,7 +29,7 @@ EventAction::~EventAction()
 
 void EventAction::BeginOfEventAction(const G4Event* evt)
 { 
-  std::cout<<"Starting BeginOfEventAction"<<std::endl;
+  //std::cout<<"Starting BeginOfEventAction"<<std::endl;
   if( evt->GetEventID() == 0 )
     fAnaManager->InitOutput();
   
@@ -78,7 +78,7 @@ void EventAction::EndOfEventAction(const G4Event* evt)
   //}
   if(DHC) {
     det_hits = DHC->entries();
-    std::cout << "Number of Detector Hits at end of event = " << det_hits << std::endl;
+    //std::cout << "Number of Detector Hits at end of event = " << det_hits << std::endl;
     //std::cout<<"DHC is true"<<std::endl;
     if( det_hits != 0 ) {
       //std::cout<<"DHC has hit"<<std::endl;
@@ -105,7 +105,7 @@ void EventAction::EndOfEventAction(const G4Event* evt)
   // PMT
   if(PHC) {
     pmt_hits = PHC->entries();
-    std::cout << "Number of PMT Hits at end of event = " << pmt_hits << std::endl;
+    //std::cout << "Number of PMT Hits at end of event = " << pmt_hits << std::endl;
     if( pmt_hits != 0 ) {
       for( G4int j = 0; j < pmt_hits; j++) {
         //std::cout << "Point 1" << std::endl;
@@ -124,12 +124,12 @@ void EventAction::EndOfEventAction(const G4Event* evt)
       }
     }
   }
-  std::cout<<"About to check the Primary info stuffs"<<std::endl;
+  //std::cout<<"About to check the Primary info stuffs"<<std::endl;
   // Primary
-  if( det_hits != 0 ) {std::cout<<"det_hits != 0"<<std::endl;}
-  else{
-    std::cout<<"det_hits == 0"<<std::endl;
-  }
+  //if( det_hits != 0 ) {std::cout<<"det_hits != 0"<<std::endl;}
+  //else{
+  //  std::cout<<"det_hits == 0"<<std::endl;
+  //}
   if( det_hits != 0 ) {
     fAnaManager->SetPrimaryDirection ( (G4ThreeVector)fPGA->GetDirection() );
     fAnaManager->SetPrimaryEnergy    ( (G4double)fPGA->GetEnergy() );
@@ -137,10 +137,10 @@ void EventAction::EndOfEventAction(const G4Event* evt)
     fAnaManager->SetPrimaryPDef      ( (G4ParticleDefinition*)fPGA->GetPrimPDef() );
     
     fAnaManager->FillTree(); 
-    std::cout<<"Primary things have been set and tree has been filled"<<std::endl;
+    //std::cout<<"Primary things have been set and tree has been filled"<<std::endl;
   }
-  std::cout<<"End of EndOfEventAction"<<std::endl;
-  std::cout<<std::endl;
+  //std::cout<<"End of EndOfEventAction"<<std::endl;
+  //std::cout<<std::endl;
 }
 
 //---------------------------------------------------------------------------
