@@ -18,7 +18,7 @@
 void  InitOutput();
 void  InitInput();
 void  GenerateOneParticle(int fPDGCode);
-void  GenerateOneSBSParticle(int iEvent);
+void  GenerateOneSBSParticle(int iEvent, int runNumber, int nEvents);
 void  GenerateOneToyParticle();
 
 // Random number generator
@@ -83,7 +83,7 @@ void GenParticlesMacOS( int fPDGCode = 13, int nevents = 100,
 
   // Initialize input
   TString inname;
-  inname.Form("~/CDetOptical/macros/gep_12Gev1000.root");
+  inname.Form("~/CDetOptical/macros/gep_12Gev1mil.root");
   fInFileName = inname;
   InitInput();
   
@@ -118,15 +118,15 @@ void GenParticlesMacOS( int fPDGCode = 13, int nevents = 100,
   for( int i = 0; i < nevents; i++ ) 
     {
       nTotal++;
-     
-      if (fPDGCode == -1 ) { 
-      	GenerateOneSBSParticle(i);
+      
+      if (fPDGCode == -1 ) {
+        GenerateOneSBSParticle(i,run_number,nevents);
       } else {
-	      if (fPDGCode == -2) {
-      		GenerateOneToyParticle();
-	      } else {
-      		GenerateOneParticle(fPDGCode);
-	      }
+              if (fPDGCode == -2) {
+                GenerateOneToyParticle();
+              } else {
+                GenerateOneParticle(fPDGCode);
+              }
       }
 
       fROOTTree->Fill();
@@ -190,16 +190,18 @@ void InitInput()
 
 // ------------------------------------------------------------------------------------------------
 
-void GenerateOneSBSParticle(int iEvent)
+void GenerateOneSBSParticle(int iEvent, int runNumber, int nEvents)
 {
+	int eventOffset = runNumber%100*nEvents;
 
-        tree1->GetEntry(iEvent);
+        tree1->GetEntry(eventOffset+iEvent);
 
-        double angle = 27.0/180.0*3.14159265;
+        double angle = 29.0/180.0*3.14159265;
+	double bbdist = 4.05;
 
         if (cdet_hit>0) {
                 fVx =        -(-(*zpos)[(*sdtrack_idx)[0]] * sin(angle) + (*xpos)[(*sdtrack_idx)[0]] * cos(angle))*100;
-                fVy =        -((*zpos)[(*sdtrack_idx)[0]] *cos(angle) + (*xpos)[(*sdtrack_idx)[0]] * sin(angle) - 4.0735)*100;
+                fVy =        -((*zpos)[(*sdtrack_idx)[0]] *cos(angle) + (*xpos)[(*sdtrack_idx)[0]] * sin(angle) - bbdist)*100;
                 fVz =         -(*ypos)[(*sdtrack_idx)[0]]*100;
                 fPx =   -(-(*zmomentum)[(*sdtrack_idx)[0]] * sin(angle) + (*xmomentum)[(*sdtrack_idx)[0]] * cos(angle))*1000;
                 fPy =   -((*zmomentum)[(*sdtrack_idx)[0]] * cos(angle) + (*xmomentum)[(*sdtrack_idx)[0]] * sin(angle))*1000;
@@ -224,7 +226,7 @@ void GenerateOneToyParticle()
   double ysize = 100.0;
   double mp = 938.2796;
   double ebeam = 11000.0;
-  double bbdist = 4.50;
+  double bbdist = 4.05;
   double angle = 29.0*3.14159265/180.0;
 
   int module = int(fRand->Uniform(0.0,3.0))+1;

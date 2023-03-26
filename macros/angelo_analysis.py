@@ -121,7 +121,7 @@ def one():
 	plt.show()
 
 def two():
-	file = uproot.open("../data/AnaBarMC_6.root")
+	file = uproot.open("../data/AnaBarMC_1000.root")
 	tree = file["T"]
 
 	# Get the arrays for the variables of interest
