@@ -9,7 +9,6 @@
 #include "TSystem.h"
 #include "TMath.h"
 
-#include <cmath>
 #include <iostream>
 #include <vector>
 
@@ -90,7 +89,7 @@ void GenParticles( int fPDGCode = 13, int nevents = 100,
   
   // Initialise output
   TString fname;
-  fname.Form("~/CDetOptical/macros/AnaBarMC_Gen_%d.root",run_number);
+  fname.Form("~/CDetOptical/batch/data/AnaBarMC_Gen_%d.root",run_number);
   fOutFileName = fname;
   InitOutput();
 
@@ -296,18 +295,17 @@ void GenerateOneParticle(int fPDGCode)
   fP = 1000.*fRand->Uniform(1.0,5.0);
 
   // Sample Angular Distributions (cos^2(theta) and flat phi)
+  //Float_t th = fThetaDist->GetRandom();
   Float_t th = TMath::Pi()-fRand->Uniform(0.0,0.15);
   Float_t ph = fPhiDist->GetRandom();
-  
-
-  // Generate momentum components
+  //Float_t th = 3.14159265;
+  //Float_t ph = 0.0;
   fPx        = fP * TMath::Sin(th) * TMath::Cos(ph);
   fPz        = fP * TMath::Sin(th) * TMath::Sin(ph);
   fPy        = fP * TMath::Cos(th);
-  
-  // Calculate mass and energy
+  //fPy        = fP * TMath::Sin(th) * TMath::Sin(ph);
+  //fPz        = fP * TMath::Cos(th);
   fM         = fPDG->GetParticle( fPDGCode )->Mass() * 1000;
-  std::cout << "Mass: " << fM << "   Code: " << fPDGCode << std::endl;
   fE         = TMath::Sqrt( (fP*fP + fM*fM) );
   fPDGCodeTree = fPDGCode;
   
