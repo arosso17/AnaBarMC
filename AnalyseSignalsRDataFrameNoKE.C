@@ -31,7 +31,6 @@ const int NDET = NUMPADDLE*NUMBARS*NUMMODULES*NUMSIDES*NUMLAYERS;
 
 int NMaxPMT = 14;
 
-
 bool getTrigger(int Detector_Nhits, int* Detector_id) {
 
     bool tophit = false;
@@ -495,10 +494,10 @@ std::vector<float> getAnaBarEdTotal(bool trigger, float fNewTheta, int Detector_
 RNode AnalyseSignalsRDataFrameNoKE(int run_number = 4000) {
 
 	global_run_number = run_number;
-	TString fileName;
 	std::cout << run_number << std::endl;
-	fileName.Form("data/AnaBarMC_%d.root",run_number);
-	//auto fileName = "data/AnaBarMC_4001.root";
+	//TString fileName;
+	//fileName.Form("data/AnaBarMC_%d.root",run_number);
+	auto fileName = "data/AnaBarMC_"+std::to_string(run_number)+".root";
 	auto treeName = "T";
 
 	ROOT::RDataFrame d(treeName,fileName);
@@ -549,29 +548,7 @@ RNode AnalyseSignalsRDataFrameNoKE(int run_number = 4000) {
 	return fdft;
 }
 
-/*
-TCanvas* muon() {
-	RNode fdft = AnalyseSignalsRDataFrameNoKE();
-	
-	auto muon_fdft = fdft.Filter("anaBarPDG==13");
-	auto ed = muon_fdft.Histo1D("anaBarEd");
-	auto edTotal = muon_fdft.Histo1D("anaBarEdTotal");
-	
-	TCanvas *muon = new TCanvas("muon","muon",800,800);
-	muon->Divide(1,2,0.01,0.01,0);
-
-	muon->cd(1);
-	ed->Draw();
-	muon->cd(2);
-	edTotal->Draw();
-
-
-	muon->DrawClone();
-	return muon;
-}
-*/
-
-TCanvas* plotC1(bool s=false){
+TCanvas* plotC1(){
 
   RNode fdft = AnalyseSignalsRDataFrameNoKE(global_run_number);
 
@@ -593,14 +570,13 @@ TCanvas* plotC1(bool s=false){
   hFingerT->Draw();
 
   c1->DrawClone();
-  if (s) {
   c1->Print("plots/c1.pdf");
-  };
+
   return c1;
 
 }
 
-TCanvas* plotC2(bool s=false){
+TCanvas* plotC2(){
 
 	RNode fdft = AnalyseSignalsRDataFrameNoKE(global_run_number);
 
@@ -622,15 +598,14 @@ TCanvas* plotC2(bool s=false){
 	hPrimPdg->Draw();
 
 	c2->DrawClone();
-	if (s) {
 	c2->Print("plots/c2RA.pdf");
-	};
+
 	return c2;
 
 }
 
 
-TCanvas* plotC3(bool s=false){
+TCanvas* plotC3(){
 
 	RNode fdft = AnalyseSignalsRDataFrameNoKE(global_run_number);
 
@@ -664,15 +639,14 @@ TCanvas* plotC3(bool s=false){
 	hAnaBarPMTID->Draw();
 
 	c3->DrawClone();
-	if (s) {
 	c3->Print("plots/c3RA.pdf");
-	};
+
 	return c3;
 
 }
 
 
-TCanvas* plotC4(bool s=false){
+TCanvas* plotC4(){
 
 	RNode fdft = AnalyseSignalsRDataFrameNoKE(global_run_number);
 
@@ -714,14 +688,13 @@ TCanvas* plotC4(bool s=false){
 	hAnaBarPMTNphot->Draw();
 
 	c4->DrawClone();
-	if (s) {
 	c4->Print("plots/c4RA.pdf");
-	};
+
 	return c4;
 }
 
 
-TCanvas* plotC5(bool s=false){
+TCanvas* plotC5(){
 
 	RNode fdft = AnalyseSignalsRDataFrameNoKE(global_run_number);
 
@@ -743,14 +716,13 @@ TCanvas* plotC5(bool s=false){
 	hAnaBarT->Draw();
 
 	c5->DrawClone();
-	if (s) {
 	c5->Print("plots/c5RA.pdf");
-	};
+
 	return c5;
 
 }
 
-TCanvas* plotC6(bool s=false){
+TCanvas* plotC6(){
 
 	RNode fdft = AnalyseSignalsRDataFrameNoKE(global_run_number);
 
@@ -763,14 +735,13 @@ TCanvas* plotC6(bool s=false){
 	hE1vsE2->Draw("COLZ");
 
 	c6->DrawClone();
-	if (s) {
 	c6->Print("plots/c6RA.pdf");
-	};
+
 	return c6;
 
 }
 
-TCanvas* plotC7(bool s=false){
+TCanvas* plotC7(){
 
 	RNode fdft = AnalyseSignalsRDataFrameNoKE(global_run_number);
 
@@ -790,23 +761,15 @@ TCanvas* plotC7(bool s=false){
 	c7->cd(4);
 	TProfile *prof = hAnaBar_Edep_vs_Nphot->ProfileX();
 	prof->Fit("pol1");
-	//fit = prof->Fit("pol1");
-	//double slope = fit->Value(1);
-	//double yInt = fit->Value(0);
-	//std::cout << "Slope: " << slope << std::endl;
-	//std::cout << "Inverse slope: " << 1.0/slope << std::endl;
-	//std::cout << "y-int: " << yInt << std::endl;
 
 	c7->DrawClone();
-	if (s) {
-		c7->Print("plots/c7RA.pdf");
-	};
+	c7->Print("plots/c7RA.pdf");
 
 	return c7;
 
 }
 
-TCanvas* plotC8(bool s=false){
+TCanvas* plotC8(){
 
 	RNode fdft = AnalyseSignalsRDataFrameNoKE(global_run_number);
 
@@ -828,15 +791,13 @@ TCanvas* plotC8(bool s=false){
 	profCut->Fit("pol1");
 
 	c8->DrawClone();
-	if (s) {
-		c8->Print("plots/c8RA.pdf");
-	};
+	c8->Print("plots/c8RA.pdf");
 
 	return c8;
 
 }
 
-TCanvas* plotC11(bool s=false){
+TCanvas* plotC11(){
 
 	RNode fdft = AnalyseSignalsRDataFrameNoKE(global_run_number);
 
@@ -849,15 +810,14 @@ TCanvas* plotC11(bool s=false){
 	hAnaBarMult->Draw();
 
 	c11->DrawClone();
-	if (s){
 	c11->Print("plots/c11RA.pdf");
-	};
+
 	return c11;
 
 }
 
 
-TCanvas* plotC12(bool s=false){
+TCanvas* plotC12(){
 
 	RNode fdft = AnalyseSignalsRDataFrameNoKE(global_run_number);
 
@@ -876,9 +836,8 @@ TCanvas* plotC12(bool s=false){
 	hPrimPz->Draw();
 
 	c12->DrawClone();
-	if (s) {
 	c12->Print("plots/c12.pdf");
-	};
+
 	return c12;
 
 }
