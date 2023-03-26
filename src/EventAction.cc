@@ -50,8 +50,7 @@ void EventAction::EndOfEventAction(const G4Event* evt)
 {
   //std::cout<<"starting EndOfEventAction"<<std::endl;
   G4int event_id   = evt->GetEventID();  
-  //if ( event_id%1 == 0 ) 
-  G4cout <<"Event " << event_id << G4endl;
+  if ( event_id%10 == 0 ) G4cout <<"Event " << event_id << G4endl;
 
   //std::cout<<"ZeroArray"<<std::endl;
   fAnaManager->ZeroArray(); 

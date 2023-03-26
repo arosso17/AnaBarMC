@@ -20,6 +20,7 @@ void  InitOutput();
 void  InitInput();
 void  GenerateOneParticle(int fPDGCode);
 void  GenerateOneSBSParticle(int iEvent);
+void  GenerateOneToyParticle();
 
 // Random number generator
 TRandom3*       fRand;
@@ -86,7 +87,7 @@ void GenParticles( int fPDGCode = 13, int nevents = 100,
   inname.Form("~/CDetOptical/macros/gep_12Gev1000.root");
   fInFileName = inname;
   InitInput();
-
+  
   // Initialise output
   TString fname;
   fname.Form("~/CDetOptical/macros/AnaBarMC_Gen_%d.root",run_number);
@@ -119,8 +120,16 @@ void GenParticles( int fPDGCode = 13, int nevents = 100,
     {
       nTotal++;
       
-      GenerateOneSBSParticle(i);
-      //GenerateOneParticle(fPDGCode);
+      if (fPDGCode == -1 ) {
+        GenerateOneSBSParticle(i);
+      } else {
+              if (fPDGCode == -2) {
+                GenerateOneToyParticle();
+              } else {
+                GenerateOneParticle(fPDGCode);
+              }
+      }
+
       fROOTTree->Fill();
       
       if( i % 10 == 0 )
@@ -164,90 +173,125 @@ void InitOutput()
 
 void InitInput()
 {
-	TFile *f1 = new TFile(fInFileName,"READ");
-	tree1 = (TTree*)f1->Get("T");
+        TFile *f1 = new TFile(fInFileName,"READ");
+        tree1 = (TTree*)f1->Get("T");
 
-	tree1->SetBranchAddress("Earm.CDET_Scint.hit.nhits", &cdet_hit);
-	tree1->SetBranchAddress("Earm.CDET_Scint.hit.sdtridx", &sdtrack_idx);
-	tree1->SetBranchAddress("SDTrack.PID",&pid);
-	tree1->SetBranchAddress("SDTrack.posx",&xpos);
-	tree1->SetBranchAddress("SDTrack.posy",&ypos);
-	tree1->SetBranchAddress("SDTrack.posz",&zpos);
-	tree1->SetBranchAddress("SDTrack.momx",&xmomentum);
-	tree1->SetBranchAddress("SDTrack.momy",&ymomentum);
-	tree1->SetBranchAddress("SDTrack.momz",&zmomentum);
-	tree1->SetBranchAddress("SDTrack.Etot",&energy);
+        tree1->SetBranchAddress("Earm.CDET_Scint.hit.nhits", &cdet_hit);
+        tree1->SetBranchAddress("Earm.CDET_Scint.hit.sdtridx", &sdtrack_idx);
+        tree1->SetBranchAddress("SDTrack.PID",&pid);
+        tree1->SetBranchAddress("SDTrack.posx",&xpos);
+        tree1->SetBranchAddress("SDTrack.posy",&ypos);
+        tree1->SetBranchAddress("SDTrack.posz",&zpos);
+        tree1->SetBranchAddress("SDTrack.momx",&xmomentum);
+        tree1->SetBranchAddress("SDTrack.momy",&ymomentum);
+        tree1->SetBranchAddress("SDTrack.momz",&zmomentum);
+        tree1->SetBranchAddress("SDTrack.Etot",&energy);
 
 }
 
 // ------------------------------------------------------------------------------------------------
 
-void GenerateOneSBSParticle(int iEvent) 
+void GenerateOneSBSParticle(int iEvent)
 {
 
-	tree1->GetEntry(iEvent);
+        tree1->GetEntry(iEvent);
 
-	//std::cout << "CDet nhits: " << cdet_hit << std::endl;
-	//for (int i = 0; i < cdet_hit ; i++) {
-	//	std::cout << "Track index: " << i << "     " << (*sdtrack_idx)[i] << std::endl;
-	//	std::cout << "xpos1: " << i << "     " << (*xpos)[(*sdtrack_idx)[i]] << std::endl;
-	//}
-	//double angle = 1.27583568;
-	double angle = 27.0/180.0*3.14159265;;
+        double angle = 27.0/180.0*3.14159265;
 
-	if (cdet_hit>0) {
-		fVx =        -(-(*zpos)[(*sdtrack_idx)[0]] * sin(angle) + (*xpos)[(*sdtrack_idx)[0]] * cos(angle))*100;
-		fVy =        -((*zpos)[(*sdtrack_idx)[0]] *cos(angle) + (*xpos)[(*sdtrack_idx)[0]] * sin(angle) - 4.0735)*100;
-		fVz =         -(*ypos)[(*sdtrack_idx)[0]]*100;
-		fPx =   -(-(*zmomentum)[(*sdtrack_idx)[0]] * sin(angle) + (*xmomentum)[(*sdtrack_idx)[0]] * cos(angle))*1000;
-		fPy =   -((*zmomentum)[(*sdtrack_idx)[0]] * cos(angle) + (*xmomentum)[(*sdtrack_idx)[0]] * sin(angle))*1000;
-		fPz =    -(*ymomentum)[(*sdtrack_idx)[0]]*1000;
-		fE =        (*energy)[(*sdtrack_idx)[0]]*1000;
-		fPDGCodeTree = (*pid)[(*sdtrack_idx)[0]];
-		
-		//fVx =        -(*xpos)[(*sdtrack_idx)[0]]*100 + 200;
-		//fVy =        -(*zpos)[(*sdtrack_idx)[0]]*100 + 380;
-		//fVz =         (*ypos)[(*sdtrack_idx)[0]]*100 - 150;
-		//fPx =   -(*xmomentum)[(*sdtrack_idx)[0]]*1000;
-		//fPy =   -(*zmomentum)[(*sdtrack_idx)[0]]*1000;
-		//fPz =    (*ymomentum)[(*sdtrack_idx)[0]]*1000;
-		//fE =        (*energy)[(*sdtrack_idx)[0]]*1000;
-		//fPDGCodeTree = (*pid)[(*sdtrack_idx)[0]];
+        if (cdet_hit>0) {
+                fVx =        -(-(*zpos)[(*sdtrack_idx)[0]] * sin(angle) + (*xpos)[(*sdtrack_idx)[0]] * cos(angle))*100;
+                fVy =        -((*zpos)[(*sdtrack_idx)[0]] *cos(angle) + (*xpos)[(*sdtrack_idx)[0]] * sin(angle) - 4.0735)*100;
+                fVz =         -(*ypos)[(*sdtrack_idx)[0]]*100;
+                fPx =   -(-(*zmomentum)[(*sdtrack_idx)[0]] * sin(angle) + (*xmomentum)[(*sdtrack_idx)[0]] * cos(angle))*1000;
+                fPy =   -((*zmomentum)[(*sdtrack_idx)[0]] * cos(angle) + (*xmomentum)[(*sdtrack_idx)[0]] * sin(angle))*1000;
+                fPz =    -(*ymomentum)[(*sdtrack_idx)[0]]*1000;
+                fE =        (*energy)[(*sdtrack_idx)[0]]*1000;
+                fPDGCodeTree = (*pid)[(*sdtrack_idx)[0]];
+ 
+               fM = fPDG->GetParticle( fPDGCodeTree )->Mass() * 1000;
+  	//	std::cout << fVx << " " << fVy << " " << fVz << std::endl;
+  	//	std::cout << fPx << " " << fPy << " " << fPz << std::endl;
+  	//	std::cout << fE << " " << fM << " " << fPDGCodeTree << std::endl;
+  	//	std::cout << std::endl;
 
-		//fVx =        -(*ypos)[(*sdtrack_idx)[0]]*100 + 0;
-		//fVy =        -(*zpos)[(*sdtrack_idx)[0]]*100 + 380;
-		//fVz =         (*xpos)[(*sdtrack_idx)[0]]*100 - 400;
-		//fPx =   -(*ymomentum)[(*sdtrack_idx)[0]]*1000;
-		//fPy =   -(*zmomentum)[(*sdtrack_idx)[0]]*1000;
-		//fPz =    (*xmomentum)[(*sdtrack_idx)[0]]*1000;
-		//fE =        (*energy)[(*sdtrack_idx)[0]]*1000;
-		//fPDGCodeTree = (*pid)[(*sdtrack_idx)[0]];
-
-		//std::cout << "xpos: " << (*xpos)[(*sdtrack_idx)[0]] << std::endl;
-		//std::cout << "ypos: " << (*ypos)[(*sdtrack_idx)[0]] << std::endl;
-		//std::cout << "zpos: " << (*zpos)[(*sdtrack_idx)[0]] << std::endl;
-		//std::cout << "xmom: " << (*xmomentum)[(*sdtrack_idx)[0]] << std::endl;
-		//std::cout << "ymom: " << (*ymomentum)[(*sdtrack_idx)[0]] << std::endl;
-		//std::cout << "zmom: " << (*zmomentum)[(*sdtrack_idx)[0]] << std::endl;
-		//std::cout << "energy: " << (*energy)[(*sdtrack_idx)[0]] << std::endl;
-		//std::cout << "pdgcode " << (*pid)[(*sdtrack_idx)[0]] << std::endl;
-		
-		//double mom = TMath::Sqrt(fPx*fPx+fPy*fPy+fPz*fPz);
-		//double mass = (mom*mom-fE*fE)/(2.0*fE);
-		//std::cout << fPDGCodeTree << std::endl;
-		
-		fM = fPDG->GetParticle( fPDGCodeTree )->Mass() * 1000;
-		
-	}
+        }
 
 }
+
+void GenerateOneToyParticle()
+{
+
+  double xsize = 100.0;
+  double ysize = 100.0;
+  double mp = 938.2796;
+  double ebeam = 11000.0;
+  double bbdist = 4.50;
+  double angle = 29.0*3.14159265/180.0;
+
+  int module = int(fRand->Uniform(0.0,3.0))+1;
+  fVz = bbdist*100.0;
+
+  if (module == 1) {
+	  fVx = -xsize/2.0+xsize*fRand->Uniform(0.0,1.0)-20.0;
+	  fVy = -ysize/2.0+ysize*fRand->Uniform(0.0,1.0)-ysize;
+  }
+  if (module == 2) {
+	  fVx = -xsize/2.0+xsize*fRand->Uniform(0.0,1.0);
+	  fVy = -ysize/2.0+ysize*fRand->Uniform(0.0,1.0);
+  }
+  if (module == 3) {
+	  fVx = -xsize/2.0+xsize*fRand->Uniform(0.0,1.0)-20.0;
+	  fVy = -ysize/2.0+ysize*fRand->Uniform(0.0,1.0)+ysize;
+  }
+
+  // Vertex positions of Event 1 in 1000 event g4sbs sample (Angelo), for testing!
+  //fVx = -29.956;
+  //fVy = -145.003;
+  //fVz = 450.0;
+
+  double theta_polar = acos((-fVx*sin(angle)+fVz*cos(angle))/
+		  sqrt(fVx*fVx+fVy*fVy+fVz*fVz));
+
+  fE = ebeam*mp/(mp+ebeam*(1.0-cos(theta_polar)));
+  fM = fPDG->GetParticle(11)->Mass()*1000;
+
+  fPx = fE*(fVx/sqrt(fVx*fVx+fVy*fVy+fVz*fVz));
+  fPy = fE*(fVy/sqrt(fVx*fVx+fVy*fVy+fVz*fVz));
+  fPz = fE*(fVz/sqrt(fVx*fVx+fVy*fVy+fVz*fVz));
+
+  // SBS -> CDet Coordinates
+  fVx = -fVx;
+  double dummy = fVy;
+  fVy = -(fVz-470.0);
+  fVz = -dummy;
+  fPx = -fPx;
+  double dummy2 = fPy;
+  fPy = -fPz;
+  fPz = -dummy2;
+
+  fPDGCodeTree = 11;
+                
+  //std::cout << module << std::endl;
+  //std::cout << fVx << " " << fVy << " " << fVz << std::endl;
+  //std::cout << fPx << " " << fPy << " " << fPz << std::endl;
+  //std::cout << fE << " " << fM << " " << fPDGCodeTree << std::endl;
+  //std::cout << std::endl;
+
+}
+
 void GenerateOneParticle(int fPDGCode)
 {
 
   // Generate vertex position in cm 
   fVx = fRand->Uniform(-12.5 , 12.5 );
   fVy = 25.0;
-  fVz = fRand->Uniform( -7.5 , 2.5 );
+  fVz = fRand->Uniform( -320.5 , 2.5 );
+
+  // Sample Momentum Distributions (flat from min to mean, p^-2.7 from mean to max)
+  //if( fRand->Uniform(0.,1) < fIntRatio ) 
+  //  fP = 1000. * fMomFlatDist->GetRandom();
+  //else 
+  //  fP = 1000. * fMomPowDist->GetRandom();
   
   fP = 1000.*fRand->Uniform(1.0,5.0);
 

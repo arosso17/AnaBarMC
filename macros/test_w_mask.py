@@ -8,10 +8,8 @@ import matplotlib.pyplot as plt
 file = uproot.open("gep_12Gev1000.root")
 tree = file["T"]
 
-
 bb_angle = np.radians(27)
 bb_dist = 4.0735
-
 
 # Get the arrays for the variables of interest
 cdet_hit = tree["Earm.CDET_Scint.hit.nhits"].array()

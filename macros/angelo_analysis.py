@@ -145,21 +145,20 @@ def two():
 				mom = np.sqrt(energy[event_i]*energy[event_i] - mass*mass)
 				momy = mom*np.sin(theta[event_i])*np.sin(phi[event_i])
 				new_theta = np.arccos(momy/mom)
-				if detector_id[event_i][hit_i] >= 30000 and detector_id[event_i][hit_i] <= 32352 and detector_pdg[event_i][hit_i] == primary_pdg[event_i] and new_theta > 3.02:
+				if detector_id[event_i][hit_i] >= 30000 and detector_id[event_i][hit_i] <= 32352 and detector_pdg[event_i][hit_i] == primary_pdg[event_i] and new_theta > 2.524:
 				
 					e.append(ed[event_i][hit_i])
 			if sum(e) > 0:
 				num_photons.append(sum(photons[event_i][: 2352]))
 				energy_dep.append(sum(e))
 
-		#num_photons.append(sum(photons[event_i][30000: 32352]))
-		#energy_dep.append(sum(ed[event_i]))
 
 	fig1, ax1 = plt.subplots()
 
 	ax1.plot(energy_dep, num_photons,'.')
 	energy_dep = np.array(energy_dep)
 	num_photons = np.array(num_photons)
+	print(len(energy_dep))
 	coefficients = np.polyfit(energy_dep, num_photons, 1)
 	m = coefficients[0]
 	b = coefficients[1]
