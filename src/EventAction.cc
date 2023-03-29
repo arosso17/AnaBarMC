@@ -29,19 +29,17 @@ EventAction::~EventAction()
 
 void EventAction::BeginOfEventAction(const G4Event* evt)
 { 
-  //std::cout<<"Starting BeginOfEventAction"<<std::endl;
+//  std::cout<<"Starting BeginOfEventAction"<<std::endl;
   if( evt->GetEventID() == 0 )
     fAnaManager->InitOutput();
   
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
-   
   if(fDetCollID < 0 ) 
     fDetCollID = SDman->GetCollectionID("DetSDCollection");
   if(fPMTCollID < 0 ) 
     fPMTCollID = SDman->GetCollectionID("PMTSDCollection");
 
-  //std::cout<<"Ending BeginOfEventAction"<<std::endl;
-  
+//  std::cout<<"Ending BeginOfEventAction"<<std::endl;
 }
 
 //---------------------------------------------------------------------------
@@ -72,10 +70,10 @@ void EventAction::EndOfEventAction(const G4Event* evt)
   }
 
   // Detector
-  //if( DHC) {std::cout<<"DHC is true"<<std::endl;}
-  //else{
-  //  std::cout<<"DHC is false"<<std::endl;
-  //}
+//if( DHC) {std::cout<<"DHC is true"<<std::endl;}
+//else{
+//  std::cout<<"DHC is false"<<std::endl;
+//}
   if(DHC) {
     det_hits = DHC->entries();
     //std::cout << "Number of Detector Hits at end of event = " << det_hits << std::endl;
@@ -133,14 +131,16 @@ void EventAction::EndOfEventAction(const G4Event* evt)
   if( det_hits != 0 ) {
     fAnaManager->SetPrimaryDirection ( (G4ThreeVector)fPGA->GetDirection() );
     fAnaManager->SetPrimaryEnergy    ( (G4double)fPGA->GetEnergy() );
+    fAnaManager->SetPrimaryX    ( (G4double)fPGA->GetX() );
+    fAnaManager->SetPrimaryY    ( (G4double)fPGA->GetY() );
+    fAnaManager->SetPrimaryZ    ( (G4double)fPGA->GetZ() );
     fAnaManager->SetPrimaryTime      ( (G4double)fPGA->GetTime() );
     fAnaManager->SetPrimaryPDef      ( (G4ParticleDefinition*)fPGA->GetPrimPDef() );
     
     fAnaManager->FillTree(); 
-    //std::cout<<"Primary things have been set and tree has been filled"<<std::endl;
+    //std::cout<<"Primay things have been set and tree has been filled"<<std::endl;
   }
   //std::cout<<"End of EndOfEventAction"<<std::endl;
-  //std::cout<<std::endl;
 }
 
 //---------------------------------------------------------------------------
